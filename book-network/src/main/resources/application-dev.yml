@@ -13,27 +13,26 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-#  docker run -d --name book-network-db -p 5432:5432 -e POSTGRES_DB=book_social_network -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password -v postgres_data:/var/lib/postgresql/data --restart always postgres:16-alpine
   mail:
-    host: localhost
-    port: 1025
-    username: username
-    password: password
+    host: smtp.gmail.com
+    port: 465
+    username: medomagdy7070@gmail.com
+    password: "xoog mwqj kfda osat"
     properties:
       mail:
         smtp:
-          trust: "*"
-        auth: true
-        starttls:
-          enabled: true
-        connectiontimeout: 5000
-        timeout: 3000
-        writetimeout: 5000
+          auth: true
+          ssl:
+            enable: true
+            trust: "*"
+          starttls:
+            enable: true
+    protocol: smtp
 application:
   security:
     jwt:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-      expiration: 604800000 # a day
+      expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
   mailing:

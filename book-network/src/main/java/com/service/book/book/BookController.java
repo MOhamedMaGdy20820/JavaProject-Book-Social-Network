@@ -125,7 +125,7 @@ public class BookController {
             consumes = "multipart/form-data")
     public ResponseEntity<?> uploadBookCoverPicture(
             @PathVariable("book-id") Integer bookId,
-            @Parameter() @RequestPart("com/service/book/file") MultipartFile file,
+            @RequestPart("file") MultipartFile file,
             Authentication connectedUser
     ) {
         service.uploadBookCoverPicture(file, connectedUser, bookId);

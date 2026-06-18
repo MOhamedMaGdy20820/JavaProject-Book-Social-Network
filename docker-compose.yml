@@ -15,7 +15,6 @@ services:
       - spring-demo
     restart: unless-stopped
 
-
   mail-dev:
     container_name: mail-dev-bsn
     image: maildev/maildev
@@ -23,6 +22,25 @@ services:
       - 1080:1080
       - 1025:1025
 
+  bsn-api:
+    container_name: bsn-api
+    image: mohamedmagdy208/booksocialnetwork:1.0.1
+    ports:
+      - 8088:8088
+    networks:
+      - spring-demo
+    depends_on:
+      - postgres
+
+  bsn-ui:
+    container_name: bsn-ui
+    image: mohamedmagdy208/booksocialnetwork-ui:1.0.0
+    ports:
+      - 8080:80
+    networks:
+      - spring-demo
+    depends_on:
+      - bsn-api
 
 networks:
   spring-demo:

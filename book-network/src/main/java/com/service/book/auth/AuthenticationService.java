@@ -10,6 +10,7 @@ import com.service.book.user.User;
 import com.service.book.user.UserRepository;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -110,6 +112,7 @@ public class AuthenticationService {
                 .build();
 
         System.out.println(token.toString());
+        log.info("Generated activation token for user :{}", generatedToken);
         tokenRepository.save(token);
 
         return generatedToken;
