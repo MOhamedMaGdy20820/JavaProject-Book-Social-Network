@@ -14,14 +14,12 @@ services:
     networks:
       - spring-demo
     restart: unless-stopped
-
   mail-dev:
     container_name: mail-dev-bsn
     image: maildev/maildev
     ports:
       - 1080:1080
       - 1025:1025
-
   bsn-api:
     container_name: bsn-api
     image: mohamedmagdy208/bsn-api:1.0.1
@@ -47,14 +45,14 @@ services:
       - spring-demo
     depends_on:
       - bsn-api
-
 networks:
   spring-demo:
     driver: bridge
-
 
 volumes:
   postgres:
     driver: local
   bsn-api-storage:
     driver: local
+
+
