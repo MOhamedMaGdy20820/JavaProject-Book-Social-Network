@@ -24,8 +24,11 @@ ENV MAILDEV_URL=localhost
 
 ENV ACTIVE_PROFILE=${PROFILE}
 ENV JAR_VERSION=${APP_VERSION}
+ENV EMAIL_HOST_NAME: missing_host_name
+ENV EMAIL_USER_NAME: missing_user_name
+ENV EMAIL_PASSWORD: missing_password
 
 CMD java -jar -Dspring.profiles.active=${ACTIVE_PROFILE} -Dspring.datasource.url=${DB_URL}  book-network-${JAR_VERSION}.jar
 
 
-# docker build -t mohamedmagdy208/booksocialnetwork:1.0.0 -f ../docker/backend/Dockerfile .
+# docker build -t mohamedmagdy208/bsn-api:1.0.0 -f ../docker/backend/Dockerfile .

@@ -24,7 +24,7 @@ services:
 
   bsn-api:
     container_name: bsn-api
-    image: mohamedmagdy208/booksocialnetwork:1.0.1
+    image: mohamedmagdy208/bsn-api:1.0.1
     ports:
       - 8088:8088
     networks:
@@ -34,7 +34,7 @@ services:
 
   bsn-ui:
     container_name: bsn-ui
-    image: mohamedmagdy208/booksocialnetwork-ui:1.0.0
+    image: mohamedmagdy208/bsn-ui:1.0.0
     ports:
       - 8080:80
     networks:

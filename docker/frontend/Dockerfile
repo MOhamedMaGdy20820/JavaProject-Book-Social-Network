@@ -21,3 +21,6 @@ COPY --from=build-stage /app/dist/book-network-ui/browser /usr/share/nginx/html
 RUN mv /usr/share/nginx/html/index.csr.html /usr/share/nginx/html/index.html
 
 EXPOSE 80
+
+
+# docker build -t mohamedmagdy208/bsn-ui:1.0.0 -f ../docker/frontend/Dockerfile .
