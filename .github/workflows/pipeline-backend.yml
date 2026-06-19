@@ -26,7 +26,7 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: Running Unit Tests
+      - name: Compile Source Code
         run: |
           cd book-network
           ./mvnw clean compile
@@ -47,7 +47,7 @@ jobs:
       - name: Running Unit Tests
         run: |
           cd book-network
-          ./mvnw clean test -Dspring.profiles.active=test
+          ./mvnw clean test
 
   build:
     runs-on: self-hosted
@@ -81,6 +81,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'corretto'
+
       - name: Extract project version
         id: extract_version
         run: |
@@ -129,6 +130,7 @@ jobs:
           docker compose -f docker-compose.yml pull -q
           docker compose -f docker-compose.yml up -d
           EOF
+
 #  health-check:
 #    name: API Health Check
 #    runs-on: self-hosted
