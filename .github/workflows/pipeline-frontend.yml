@@ -44,21 +44,20 @@ jobs:
     runs-on: self-hosted
     needs: [ build-image ]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Create deployment folder
+        run: |
+          mkdir -p ci-cd
 
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            mkdir -p ci-cd
-            cd ci-cd
-            docker compose -f docker-compose.yml down
-            docker compose -f docker-compose.yml pull -q
-            docker compose -f docker-compose.yml up -d
+      - name: Copy docker-compose file
+        run: |
+          cp docker-compose.yml ci-cd/docker-compose.yml
+
+      - name: Deploy Frontend locally
+        run: |
+          cd ci-cd
+          docker compose down
+          docker compose pull -q
+          docker compose up -d
 
 #  health-check:
 #    name: UI Health Check
