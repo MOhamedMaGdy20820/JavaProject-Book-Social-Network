@@ -48,7 +48,9 @@ jobs:
           distribution: 'corretto'
 
       - name: Start Database
-        run: docker compose -f docker-compose.yml up -d postgres
+        run: |
+          docker compose -f docker-compose.yml down --remove-orphans
+          docker compose -f docker-compose.yml up -d postgres
 
       - name: Wait for Database
         run: sleep 10
