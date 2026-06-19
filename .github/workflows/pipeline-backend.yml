@@ -140,7 +140,7 @@ jobs:
           echo "EMAIL_HOST_NAME=${{ secrets.EMAIL_HOST_NAME }}" > .env
           echo "EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}" >> .env
           echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
-          docker compose down
+          docker compose down --remove-orphans
           docker compose pull -q
           docker compose up -d
 
