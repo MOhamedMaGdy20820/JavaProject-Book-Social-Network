@@ -11,7 +11,7 @@ import { ActivateAccountComponent } from "./pages/activate-account/activate-acco
 import { CodeInputModule } from "angular-code-input";
 import { HttpTokenInterceptor } from "./services/interceptor/http-token.interceptor";
 import {ApiModule} from "./services/api.module";
-NgModule({
+@NgModule({
  declarations: [
     AppComponent,
     LoginComponent,

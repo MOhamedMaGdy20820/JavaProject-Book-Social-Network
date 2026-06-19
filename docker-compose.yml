@@ -22,7 +22,7 @@ services:
       - 1025:1025
   bsn-api:
     container_name: bsn-api
-    image: mohamedmagdy208/bsn-api:1.0.1
+    image: mohamedmagdy208/bsn-api:latest
     environment:
       EMAIL_HOST_NAME: ${EMAIL_HOST_NAME}
       EMAIL_USER_NAME: ${EMAIL_USER_NAME}
@@ -38,7 +38,7 @@ services:
 
   bsn-ui:
     container_name: bsn-ui
-    image: mohamedmagdy208/bsn-ui:1.0.0
+    image: mohamedmagdy208/bsn-ui:latest
     ports:
       - 8080:80
     networks:
