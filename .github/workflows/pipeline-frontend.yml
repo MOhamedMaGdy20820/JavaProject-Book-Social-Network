@@ -10,7 +10,6 @@ on:
       - 'docker-compose.yml'
       - .github/workflows/*-frontend.yml
 
-
 jobs:
   build-image:
     name: Build FE Docker image

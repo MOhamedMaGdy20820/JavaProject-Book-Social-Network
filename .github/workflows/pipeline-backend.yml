@@ -71,7 +71,8 @@ jobs:
 
       - name: Stop Database
         if: always()
-        run: docker compose -f docker-compose.yml stop postgres
+        run: docker compose -f docker-compose.yml down -v
+
 
   build:
     runs-on: self-hosted
@@ -148,6 +149,7 @@ jobs:
           echo 'EMAIL_HOST_NAME="${{ secrets.EMAIL_HOST_NAME }}"' > .env
           echo 'EMAIL_USER_NAME="${{ secrets.EMAIL_USER_NAME }}"' >> .env
           echo 'EMAIL_PASSWORD="${{ secrets.EMAIL_PASSWORD }}"' >> .env
+          docker rm -f postgres-sql-bsn || true
           docker compose down --remove-orphans
           docker compose pull -q
           docker compose up -d
