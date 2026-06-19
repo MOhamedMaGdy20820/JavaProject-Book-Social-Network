@@ -40,24 +40,25 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}
 
   deploy:
-    name: Deploy Frontend
+    name: Deploy
     runs-on: self-hosted
     needs: [ build-image ]
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Create deployment folder
-        run: ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
-
-      - name: Copy docker-compose file
-        run: scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
-
-      - name: Set ENV variable and deploy
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
-          cd ci-cd
-          docker compose -f docker-compose.yml pull -q
-          docker compose -f docker-compose.yml up -d
-          EOF
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            mkdir -p ci-cd
+            cd ci-cd
+            docker compose -f docker-compose.yml down
+            docker compose -f docker-compose.yml pull -q
+            docker compose -f docker-compose.yml up -d
 
 #  health-check:
 #    name: UI Health Check

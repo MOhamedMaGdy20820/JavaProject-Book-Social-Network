@@ -138,14 +138,15 @@ jobs:
 
       - name: Set ENV variable and deploy
         run: |
-          ssh -oStrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
-          export EMAIL_HOST_NAME=${{ secrets.EMAIL_HOST_NAME }}
-          export EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
-          export EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
-          cd ci-cd
-          docker compose -f docker-compose.yml pull -q
-          docker compose -f docker-compose.yml up -d
-          EOF
+            ssh -oStrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
+            cd ci-cd
+            docker compose -f docker-compose.yml down
+            docker compose -f docker-compose.yml pull -q
+            EMAIL_HOST_NAME=${{ secrets.EMAIL_HOST_NAME }} \
+            EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }} \
+            EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
+            docker compose -f docker-compose.yml up -d
+            EOF
 
 #  health-check:
 #    name: API Health Check
