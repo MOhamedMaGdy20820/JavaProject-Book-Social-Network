@@ -48,8 +48,13 @@ jobs:
           distribution: 'corretto'
 
       - name: Start Database
+        env:
+          EMAIL_HOST_NAME: ${{ secrets.EMAIL_HOST_NAME }}
+          EMAIL_USER_NAME: ${{ secrets.EMAIL_USER_NAME }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         run: |
-          docker compose -f docker-compose.yml down --remove-orphans
+          docker rm -f postgres-sql-bsn || true
+          docker compose -f docker-compose.yml down --remove-orphans || true
           docker compose -f docker-compose.yml up -d postgres
 
       - name: Wait for Database
