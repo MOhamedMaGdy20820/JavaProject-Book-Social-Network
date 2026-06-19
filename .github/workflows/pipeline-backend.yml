@@ -129,24 +129,21 @@ jobs:
     runs-on: self-hosted
     needs: [build-image]
     steps:
-
-      - name: Create deployment folder
-        run: ssh -oStrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
-
-      - name: Copy docker-compose file
-        run: scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
-
-      - name: Set ENV variable and deploy
+      - name: Prepare deployment folder
         run: |
-            ssh -oStrictHostKeyChecking=no ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
-            EMAIL_HOST_NAME=${{ secrets.EMAIL_HOST_NAME }}
-            EMAIL_USER_NAME=${{ secrets.EMAIL_USER_NAME }}
-            EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
-            cd ci-cd
-            docker compose -f docker-compose.yml down
-            docker compose -f docker-compose.yml pull -q
-            docker compose -f docker-compose.yml up -d
-            EOF
+          mkdir -p /home/mohamed/ci-cd
+          cp docker-compose.yml /home/mohamed/ci-cd/docker-compose.yml
+
+      - name: Deploy application locally
+        run: |
+          cd /home/mohamed/ci-cd
+          docker compose down
+          docker compose pull -q
+          EMAIL_HOST_NAME='${{ secrets.EMAIL_HOST_NAME }}' \
+          EMAIL_USER_NAME='${{ secrets.EMAIL_USER_NAME }}' \
+          EMAIL_PASSWORD='${{ secrets.EMAIL_PASSWORD }}' \
+          docker compose up -d
+
 
 #  health-check:
 #    name: API Health Check
