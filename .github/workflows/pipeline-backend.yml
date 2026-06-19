@@ -37,11 +37,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'corretto'
+
+      - name: Start Database
+        run: docker compose -f docker-compose.yml up -d postgres
+
+      - name: Wait for Database
+        run: sleep 10
+
       - name: Running Unit Tests
         env:
           EMAIL_HOST_NAME: ${{ secrets.EMAIL_HOST_NAME }}
@@ -50,6 +60,10 @@ jobs:
         run: |
           cd book-network
           ./mvnw clean test
+
+      - name: Stop Database
+        if: always()
+        run: docker compose -f docker-compose.yml stop postgres
 
   build:
     runs-on: self-hosted
