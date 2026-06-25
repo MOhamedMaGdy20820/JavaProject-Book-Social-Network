@@ -2,6 +2,7 @@ package com.service.book.user;
 
 //import com.service.book.book.Book;
 //import com.service.book.history.BookTransactionHistory;
+import com.service.book.book.Book;
 import com.service.book.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,9 +32,9 @@ import static jakarta.persistence.FetchType.EAGER;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "_user")
-@EntityListeners(AuditingEntityListener.class)
+//@Entity
+//@Table(name = "_user")
+//@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails, Principal {
 
     @Id
@@ -57,9 +58,9 @@ public class User implements UserDetails, Principal {
 
     @ManyToMany(fetch = EAGER)
     private List<Role> roles;
-//
-//    @OneToMany(mappedBy = "owner")
-//    private List<Book> books;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Book> books;
 //
 //    @OneToMany(mappedBy = "user")
 //    private List<BookTransactionHistory> histories;

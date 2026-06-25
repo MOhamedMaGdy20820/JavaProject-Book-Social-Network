@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {JwtHelperService} from "@auth0/angular-jwt";
+import {JwtHelperService} from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -45,8 +45,3 @@ export class TokenService {
     return [];
   }
 }
-
-//localStorage هو جزء من واجهة Web Storage API، وهو نوع من التخزين المحلي (في المتصفح)
-// الذي يُستخدم لتخزين البيانات في شكل أزواج (key, value)
-// على جهاز المستخدم. البيانات المخزنة في localStorage تبقى موجودة حتى بعد إغلاق المتصفح
-// أو إعادة تشغيل الجهاز، إلا إذا قام المستخدم بحذفها يدويًا.

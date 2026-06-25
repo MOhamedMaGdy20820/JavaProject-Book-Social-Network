@@ -13,13 +13,11 @@ public interface BookTransactionHistoryRepository extends JpaRepository<BookTran
             SELECT
             (COUNT (*) > 0) AS isBorrowed
             FROM BookTransactionHistory bookTransactionHistory
-            WHERE bookTransactionHistory.user.id = :userId
+            WHERE bookTransactionHistory.userId = :userId
             AND bookTransactionHistory.book.id = :bookId
             AND bookTransactionHistory.returnApproved = false
             """)
-    //  تتحقق مما إذا كان الكتاب المحدد قد تم استعارته بالفعل بواسطة المستخدم ولم تتم الموافقة على إرجاعه بعد.
-    //  إذا كان الكتاب ما زال مستعارًا، سيتم إرجاع true، وإلا سيتم إرجاع false.
-    boolean isAlreadyBorrowedByUser(@Param("bookId") Integer bookId, @Param("userId") Integer userId);
+    boolean isAlreadyBorrowedByUser(@Param("bookId") Integer bookId, @Param("userId") String userId);
 
     @Query("""
             SELECT
@@ -28,50 +26,38 @@ public interface BookTransactionHistoryRepository extends JpaRepository<BookTran
             WHERE bookTransactionHistory.book.id = :bookId
             AND bookTransactionHistory.returnApproved = false
             """)
-    // هذا الاستعلام يتحقق من ما إذا كان الكتاب ما زال مستعارًا ولم تتم الموافقة على إرجاعه
-    // ، وإذا كان كذلك يتم إرجاع true، وإلا سيتم إرجاع false.
     boolean isAlreadyBorrowed(@Param("bookId") Integer bookId);
 
     @Query("""
             SELECT transaction
             FROM BookTransactionHistory  transaction
-            WHERE transaction.user.id = :userId
+            WHERE transaction.userId = :userId
             AND transaction.book.id = :bookId
             AND transaction.returned = false
             AND transaction.returnApproved = false
             """)
-    Optional<BookTransactionHistory> findByBookIdAndUserId(@Param("bookId") Integer bookId, @Param("userId") Integer userId);
+    Optional <BookTransactionHistory> findByBookIdAndUserId(@Param("bookId") Integer bookId, @Param("userId") String userId);
 
     @Query("""
             SELECT transaction
             FROM BookTransactionHistory  transaction
-            WHERE transaction.book.owner.id = :userId
+            WHERE transaction.book.createdBy = :userId
             AND transaction.book.id = :bookId
             AND transaction.returned = true
             AND transaction.returnApproved = false
             """)
-    Optional<BookTransactionHistory> findByBookIdAndOwnerId(@Param("bookId") Integer bookId, @Param("userId") Integer userId);
+    Optional<BookTransactionHistory> findByBookIdAndOwnerId(@Param("bookId") Integer bookId, @Param("userId") String userId);
 
     @Query("""
             SELECT history
             FROM BookTransactionHistory history
-            WHERE history.user.id = :userId
+            WHERE history.userId = :userId
             """)
-// هذا الاستعلام يبحث عن جميع المعاملات أو السجلات التي قام فيها المستخدم (userId)
-// باستعارة كتب، أي أن المستخدم هو الشخص الذي قام بالاقتراض.
-    Page<BookTransactionHistory> findAllBorrowedBooks(Pageable pageable, Integer userId);
-
-
-@Query("""
+    Page<BookTransactionHistory> findAllBorrowedBooks(Pageable pageable, String  userId);
+    @Query("""
             SELECT history
             FROM BookTransactionHistory history
-            WHERE history.book.owner.id = :userId
+            WHERE history.book.createdBy = :userId
             """)
-
-// هذا الاستعلام يبحث عن جميع المعاملات أو السجلات التي يكون فيها المستخدم (userId) هو مالك الكتاب
-// أي أن المستخدم هو الشخص الذي يملك الكتاب الذي تم إرجاعه.
-
-// بشوف حاله الكتب بتعتي حد استعرها ولا لا
-// اللي استعار كتاب رجعه ولا لا
-    Page<BookTransactionHistory> findAllReturnedBooks(Pageable pageable, Integer userId);
+    Page<BookTransactionHistory> findAllReturnedBooks(Pageable pageable, String userId);
 }

@@ -1,18 +1,23 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch } from "@angular/common/http";
 import { LoginComponent } from './pages/login/login.component';
-import { FormsModule } from "@angular/forms";
 import { RegisterComponent } from './pages/register/register.component';
-import { ActivateAccountComponent } from "./pages/activate-account/activate-account.component";
-import { CodeInputModule } from "angular-code-input";
-import { HttpTokenInterceptor } from "./services/interceptor/http-token.interceptor";
-import {ApiModule} from "./services/api.module";
+import {FormsModule} from '@angular/forms';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
+import {HttpTokenInterceptor} from './services/interceptor/http-token.interceptor';
+import { ActivateAccountComponent } from './pages/activate-account/activate-account.component';
+import {CodeInputModule} from 'angular-code-input';
+import {KeycloakService} from './services/keycloak/keycloak.service';
+
+export function kcFactory(kcService: KeycloakService) {
+  return () => kcService.init();
+}
+
 @NgModule({
- declarations: [
+  declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
@@ -21,19 +26,24 @@ import {ApiModule} from "./services/api.module";
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
     FormsModule,
-    CodeInputModule,
-    ApiModule.forRoot({rootUrl:'http://192.168.52.128:8088/api/v1'})
+    HttpClientModule,
+    CodeInputModule
   ],
   providers: [
+    HttpClient,
     {
-      provide: HTTP_INTERCEPTORS, // HTTP interceptor
-      useClass: HttpTokenInterceptor, // Custom interceptor
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpTokenInterceptor,
       multi: true
     },
-    provideClientHydration(),
-    provideHttpClient(withFetch()) // Enable fetch for HttpClient
+    {
+      provide: APP_INITIALIZER,
+      deps: [KeycloakService],
+      useFactory: kcFactory,
+      multi: true
+    }
+
   ],
   bootstrap: [AppComponent]
 })

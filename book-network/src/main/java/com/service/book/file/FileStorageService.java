@@ -26,10 +26,9 @@ public class FileStorageService {
 
     public String saveFile(
             @Nonnull MultipartFile sourceFile,
-            @Nonnull Integer userId
+            @Nonnull String userId
     ) {
-        final String fileUploadSubPath = "users" + separator + userId; // users/userId
-
+        final String fileUploadSubPath = "users" + separator + userId;
         return uploadFile(sourceFile, fileUploadSubPath);
     }
 
@@ -37,21 +36,18 @@ public class FileStorageService {
             @Nonnull MultipartFile sourceFile,
             @Nonnull String fileUploadSubPath
     ) {
-        final String finalUploadPath = fileUploadPath + separator + fileUploadSubPath; //   ./uploads/users/userId
+        final String finalUploadPath = fileUploadPath + separator + fileUploadSubPath;
         File targetFolder = new File(finalUploadPath);
 
         if (!targetFolder.exists()) {
             boolean folderCreated = targetFolder.mkdirs();
-
             if (!folderCreated) {
                 log.warn("Failed to create the target folder: " + targetFolder);
                 return null;
             }
         }
-
         final String fileExtension = getFileExtension(sourceFile.getOriginalFilename());
-        String targetFilePath = finalUploadPath + separator + currentTimeMillis() + "." + fileExtension; // EX : ./uploads/users/123/1671820370000.jpg
-
+        String targetFilePath = finalUploadPath + separator + currentTimeMillis() + "." + fileExtension;
         Path targetPath = Paths.get(targetFilePath);
         try {
             Files.write(targetPath, sourceFile.getBytes());
