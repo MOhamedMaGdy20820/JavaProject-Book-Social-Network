@@ -21,7 +21,7 @@ export class KeycloakService {
     if (!this._keycloak) {
       this._keycloak = new Keycloak({
         url: 'http://localhost:9090',
-        realm: 'book-social-network.json',
+        realm: 'book-social-network',
         clientId: 'bsn'
       });
     }
